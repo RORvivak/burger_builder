@@ -1,25 +1,43 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import User from "./User";
+import axios from 'axios'
 
 class App extends Component {
+  
+  constructor(){
+    super()
+    this.state = {
+        name: "",
+        job: ""
+    }
+  }
+  
+  change = (event) =>{
+    const {name, value} = event.target
+    let user = Object.assign({}, this.state)
+    user[name] =  value 
+    this.setState(user)
+    console.log(user)
+    return false
+  }
+
+  submit = (event) =>
+  {   
+    event.preventDefault()
+    let user = Object.assign({}, this.state)
+    axios.post("https://reqres.in/api/users", {"name": user.name, "job": user.job}).then(
+      res => console.log(res)
+
+    ).catch(
+      res => console.log(res)
+    )
+    return false;
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <User change={this.change} submit = {this.submit}></User>
       </div>
     );
   }
